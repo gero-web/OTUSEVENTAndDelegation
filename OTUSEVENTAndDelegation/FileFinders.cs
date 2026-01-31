@@ -4,7 +4,7 @@ namespace OTUSEVENTAndDelegation
 {
     internal class FileFinders
     {
-       public event EventHandler<FileArgs> FileHangler;
+        public event EventHandler<FileArgs> FileHangler;
 
         public void SearchFile(string path)
         {
@@ -12,7 +12,7 @@ namespace OTUSEVENTAndDelegation
             {
                 throw new ArgumentNullException("Путь не может быть пустым");
             }
-            
+
             DirectoryInfo dir = new(path);
             if (!dir.Exists)
             {
@@ -23,9 +23,14 @@ namespace OTUSEVENTAndDelegation
 
             foreach (var file in files)
             {
-                FileHangler?.Invoke(this, new FileArgs(fileName: file.Name));
+                var args = new FileArgs(fileName: file.Name);
+                FileHangler?.Invoke(this, args);
+                if (args.Cansel)
+                {
+                    return;
+                }
             }
-             
+
         }
     }
 }
